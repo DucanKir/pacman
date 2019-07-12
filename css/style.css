@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+.gameboard {
+  width: 600px;
+  height: 600px;
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.tile {
+  width: calc(100%/18);
+  height: calc(100%/18);
+  border: 2px solid white;
+  transition: 0.5s;
+}
+.wall {
+  background: lightgrey;
+}
+h1 {
+  text-align: center;
+}
+
+.popupMenu {
+  display: none;
+  width: 600px;
+  height: 600px;
+  background-color: rgba(0,0,0,0.7);
+  position: absolute;
+}
+.pacman {
+  width: calc(100%/18);
+  height: calc(100%/18);
+  border-radius: 100%;
+  background-color: yellow;
+}
+
+.dot {
+  border-radius: 100%;
+  background-color: red;
+}
