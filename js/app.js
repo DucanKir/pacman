@@ -3,11 +3,20 @@ const menu = document.querySelector('.popupMenu')
 let currentIndex = 300
 const width = 18
 const scoreCounter = document.querySelector('.score')
+const startBtn = document.querySelector('.startBtn')
+const popupMenu = document.querySelector('.popupMenu')
+
 
 let score = 0
 
 
-// creating board
+//start game=======================
+function startGame() {
+  gameboard.style.display = 'flex'
+  popupMenu.style.display = 'none'
+}
+
+// creating board====================
 for (let i = 0; i<324; i++) {
   const tile = document.createElement('div')
   tile.classList.add('tile')
@@ -17,7 +26,7 @@ const tiles = document.querySelectorAll('.tile')
 
 
 
-// level design
+// level design=======================
 const levelOne = [
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
   1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -39,7 +48,7 @@ const levelOne = [
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 ]
 
-// assigning walls and pacman
+// assigning walls and pacman==========================
 for (let i = 0; i<tiles.length; i++) {
   let item = levelOne[i]
   if (item === 1) {
@@ -47,14 +56,16 @@ for (let i = 0; i<tiles.length; i++) {
   }
 }
 
-//move pacman
+//move pacman===========================================
 function pacMove(e) {
   tiles[currentIndex].classList.remove('pacman')
   switch(e.keyCode) {
     case 37:
+      if(currentIndex === 144) currentIndex = currentIndex + width
       if (levelOne[currentIndex-1] !== 1) currentIndex -= 1
       break
     case 39:
+      if(currentIndex === 161) currentIndex = currentIndex - width
       if (levelOne[currentIndex+1] !== 1) currentIndex += 1
       break
     case 38:
@@ -65,7 +76,7 @@ function pacMove(e) {
       break
 
   }
-  // pacman eating dots
+  // pacman eating dots====================================
   if(tiles[currentIndex].classList.contains('dot')) {
     tiles[currentIndex].classList.remove('dot')
     score++
@@ -77,7 +88,7 @@ function pacMove(e) {
 }
 
 
-// set pacman food
+// set pacman food===========================================
 function setDots () {
   let randomIndex = Math.floor(Math.random() * levelOne.length)
   while (levelOne[randomIndex] === 1) {
@@ -88,8 +99,14 @@ function setDots () {
 for(let i = 0; i< 4; i++) setDots()
 
 
-
 document.addEventListener('keyup', pacMove)
+startBtn.addEventListener('click', startGame)
+
+
+
+
+
+
 
 
 
