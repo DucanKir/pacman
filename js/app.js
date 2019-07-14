@@ -3,7 +3,7 @@ const menu = document.querySelector('.popupMenu')
 const scoreCounter = document.querySelector('.score')
 const startBtn = document.querySelector('.startBtn')
 const popupMenu = document.querySelector('.popupMenu')
-
+const lives = document.querySelector('.lives')
 // position of pacman
 // yAxis is a row
 let yAxis = 16
@@ -15,6 +15,7 @@ const width = 18
 const height = 18
 
 let score = 0
+
 
 //start game================================================
 function startGame() {
@@ -47,8 +48,8 @@ for (let i = 0; i<height; i++) {
 const levelOne = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
-  [1, 5, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 5, 1],
+  [1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1],
+  [1, 5, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 5, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
   [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
   [1, 0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 1, 0, 0, 0, 0, 0, 1],
@@ -57,11 +58,11 @@ const levelOne = [
   [1, 1, 1, 1, 1, 0, 1, 4, 4, 4, 4, 1, 0, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
-  [1, 5, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 5, 1],
-  [1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
-  [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 5, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 5, 1],
+  [1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
@@ -80,38 +81,37 @@ for (let i = 0; i<height; i++) {
     }
   }
 }
-// pulsing energizer   ???????????????????
-// setInterval(function(){
-//   if (div.classList.contains('energizer')) {
-//
-//   }
-// }, 500)
+
+
 
 tiles[yAxis][xAxis].classList.add('pacman')
 //move pacman===========================================
 function pacMove(e) {
   tiles[yAxis][xAxis].classList.remove('pacman')
+  let direction // image direction
   switch(e.keyCode) {
     // move right
     case 39:
       if(levelOne[yAxis][xAxis] === 2) xAxis = 0 //fast track from right side of board to left
       else if (levelOne[yAxis][xAxis+1] !== 1) xAxis += 1
-      console.log(xAxis)
+      direction = 'pacmanMoveRight'
       break
     // move left
     case 37:
       if(levelOne[yAxis][xAxis] === 3) xAxis = levelOne[yAxis].length  //fast track from left side of board to right
       if (levelOne[yAxis][xAxis-1] !== 1) xAxis -= 1
+      direction = 'pacmanMoveleft'
       break
       //move up
     case 38:
       if (levelOne[yAxis-1][xAxis] !== 1) yAxis -= 1
+      direction = 'pacmanMoveUp'
       break
       //move down
     case 40:
       if (levelOne[yAxis+1][xAxis] !== 1) yAxis += 1
+      direction = 'pacmanMoveDown'
       break
-  //
   }
   // pacman eating dots====================================
   if(tiles[yAxis][xAxis].classList.contains('dot')) {
@@ -124,7 +124,10 @@ function pacMove(e) {
     scoreCounter.innerHTML = score
   }
   tiles[yAxis][xAxis].classList.add('pacman')
-
+  tiles[yAxis][xAxis].classList.add(direction)
+  setTimeout(function() {
+    tiles[yAxis][xAxis].classList.remove(direction)
+  }, 100)
 }
 
 document.addEventListener('keyup', pacMove)
@@ -132,12 +135,13 @@ document.addEventListener('keyup', pacMove)
 
 
 //bfs for ghosts movement==================================
-const graph = []
+const nodes = {}
 
-function Nodes(links) {
+function Nodes(coordinates, links) {
+  this.coord = coordinates
   this.links = links
-  this.path = []
   this.visited = false
+  this.cameFrom = NaN
 }
 let neighbours = []
 
@@ -181,19 +185,55 @@ function assignNodes(y, x) {
     y -=1
   }
 }
-//creating graph
+//creating nodes
 for (let i = 0; i< height; i++) {
   for(let j = 0; j< width; j++){
     assignNodes(i,j)
     if (neighbours.length !== 0){
-      let node = new Nodes(neighbours)
+      let node = new Nodes([i,j], neighbours)
       neighbours = []
-      graph.push(node)
+      nodes[node.coord] = node
     }
   }
 }
 
+function cleanNodes() {
+  Object.keys(nodes).forEach(function(key) {
+    nodes[key].visited = false
+    nodes[key].cameFrom = NaN
+  })
+}
 
+function getPathDirection(start, target) {
+  cleanNodes()
+  var listToExplore = [start]
 
+  nodes[start].visited = true
 
-//
+  while (listToExplore.length > 0 ) {
+    var nodeIndex = listToExplore.shift()
+
+    for (let i=0; i<nodes[nodeIndex].links.length; i++) {
+      let childIndex = nodes[nodeIndex].links[i]
+      if (!nodes[childIndex].visited) { // should be 1 number but returns 2
+        nodes[childIndex].visited = true
+        nodes[childIndex].cameFrom = nodeIndex
+        listToExplore.push(childIndex)
+      }
+
+      if (String(childIndex) === String(target)) {
+        let lastNodeIndex = childIndex
+
+        while (true) {
+          if (String(nodes[lastNodeIndex].cameFrom) === String(start)) {
+            return lastNodeIndex
+          }
+          lastNodeIndex = nodes[lastNodeIndex].cameFrom
+        }
+      }
+
+    }
+  }
+}
+
+//getPathDirection([1,1], [5, 1])
