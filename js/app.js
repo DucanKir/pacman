@@ -4,8 +4,11 @@ const scoreCounter = document.querySelector('.score')
 const startBtn = document.querySelector('.startBtn')
 const popupMenu = document.querySelector('.popupMenu')
 
-//current position of pacman
-let currentIndex = 300
+// position of pacman
+// yAxis is a row
+let yAxis = 16
+// xAxis is a column
+let xAxis = 9
 
 //size of gameboard
 const width = 18
@@ -67,41 +70,41 @@ for (let i = 0; i<height; i++) {
     }
   }
 }
+tiles[yAxis][xAxis].classList.add('pacman')
+//move pacman===========================================
+function pacMove(e) {
+  tiles[yAxis][xAxis].classList.remove('pacman')
+  switch(e.keyCode) {
+    // move right
+    case 39:
+      // if(currentIndex === 161) currentIndex = currentIndex - width
+      if (levelOne[yAxis][xAxis+1] !== 1) xAxis += 1
+      console.log(xAxis)
+      break
+    // move left
+    case 37:
+      // if(currentIndex === 144) currentIndex = currentIndex + width
+      if (levelOne[yAxis][xAxis-1] !== 1) xAxis -= 1
+      break
+      //move up
+    case 38:
+      if (levelOne[yAxis-1][xAxis] !== 1) yAxis -= 1
+      break
+      //move down
+    case 40:
+      if (levelOne[yAxis+1][xAxis] !== 1) yAxis += 1
+      break
+  //
+  }
+  // // pacman eating dots====================================
+  // if(tiles[currentIndex].classList.contains('dot')) {
+  //   tiles[currentIndex].classList.remove('dot')
+  //   score++
+  //   scoreCounter.innerHTML = score
+  // }
+  tiles[yAxis][xAxis].classList.add('pacman')
 
-// //move pacman===========================================
-// function pacMove(e) {
-//   tiles[currentIndex].classList.remove('pacman')
-//   switch(e.keyCode) {
-//     // move left
-//     case 37:
-//       if(currentIndex === 144) currentIndex = currentIndex + width
-//       if (levelOne[currentIndex-1] !== 1) currentIndex -= 1
-//       break
-//     // move right
-//     case 39:
-//       if(currentIndex === 161) currentIndex = currentIndex - width
-//       if (levelOne[currentIndex+1] !== 1) currentIndex += 1
-//       break
-//       //move up
-//     case 38:
-//       if (levelOne[currentIndex-width] !== 1) currentIndex -= width
-//       break
-//       //move down
-//     case 40:
-//       if (levelOne[currentIndex+width] !== 1) currentIndex += width
-//       break
-//
-//   }
-//   // pacman eating dots====================================
-//   if(tiles[currentIndex].classList.contains('dot')) {
-//     tiles[currentIndex].classList.remove('dot')
-//     score++
-//     scoreCounter.innerHTML = score
-//
-//   }
-//   tiles[currentIndex].classList.add('pacman')
-//
-// }
+}
 //
 //
 // // set pacman food===========================================
@@ -115,7 +118,7 @@ for (let i = 0; i<height; i++) {
 // for(let i = 0; i< 6; i++) setDots()
 //
 //
-// document.addEventListener('keyup', pacMove)
+document.addEventListener('keyup', pacMove)
 // startBtn.addEventListener('click', startGame)
 //
 //
