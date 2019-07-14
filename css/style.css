@@ -6,6 +6,7 @@ body {
   margin: 0;
   display: flex;
   justify-content: center;
+  background-color: black;
 }
 .gameboard {
   width: 600px;
@@ -18,11 +19,12 @@ body {
 .tile {
   width: calc(100%/18);
   height: calc(100%/18);
-  border: 2px solid white;
-  transition: 0.5s;
+  border: 2px solid black;
+  transition: 0.5s ease-out;
 }
 .wall {
-  background: lightgrey;
+  background: black;
+  border: 3px solid blue;
 }
 h1 {
   text-align: center;
@@ -37,6 +39,17 @@ h1 {
   background-color: rgba(0,0,0,0.7);
 
 }
+.energizer {
+  border: 6px solid black;
+  background-color: white;
+  border-radius: 100%;
+  transition: 0.5s;
+}
+
+.dot {
+  background-color: white;
+  border: 15px solid black;
+}
 .pacman {
   width: calc(100%/18);
   height: calc(100%/18);
@@ -44,15 +57,11 @@ h1 {
   background-color: yellow;
 }
 
-.dot {
-  border-radius: 100%;
-  background-color: red;
-}
 button {
   width: 150px;
   height: 100px;
   font-size: 30px;
 }
 .score {
-
+ color: white;
 }
