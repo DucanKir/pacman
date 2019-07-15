@@ -85,6 +85,18 @@ h1 {
   background-image: url('https://i.imgur.com/RkZQmH3.png');
   transform: rotate(90deg);
 }
+.blinky {
+  background-color: red;
+}
+.inky {
+  background-color: blue;
+}
+.clyde {
+  background-color: orange;
+}
+.pinky {
+  background-color: pink;
+}
 
 button {
   width: 150px;
@@ -110,11 +122,10 @@ button {
   display: flex;
 }
 
-.live {
+.life {
   margin: 1px;
   width: 30px;
   height: 30px;
   background-image: url('https://i.imgur.com/RkZQmH3.png');
   background-size: cover;
-
 }

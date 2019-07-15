@@ -4,11 +4,16 @@ const scoreCounter = document.querySelector('.score')
 const startBtn = document.querySelector('.startBtn')
 const popupMenu = document.querySelector('.popupMenu')
 const lives = document.querySelector('.lives')
-// position of pacman
+// position of pacman====================================
 // yAxis is a row
 let yAxis = 16
 // xAxis is a column
 let xAxis = 9
+//position of ghosts=====================================
+let yAxisGhost = 6
+let xAxisGhost = 8
+
+
 
 //size of gameboard
 const width = 18
@@ -85,6 +90,7 @@ for (let i = 0; i<height; i++) {
 
 
 tiles[yAxis][xAxis].classList.add('pacman')
+
 //move pacman===========================================
 function pacMove(e) {
   tiles[yAxis][xAxis].classList.remove('pacman')
@@ -190,32 +196,32 @@ for (let i = 0; i< height; i++) {
   for(let j = 0; j< width; j++){
     assignNodes(i,j)
     if (neighbours.length !== 0){
-      let node = new Nodes([i,j], neighbours)
+      const node = new Nodes([i,j], neighbours)
       neighbours = []
       nodes[node.coord] = node
     }
   }
 }
-
+// cleaning nodes so that they can be used again
 function cleanNodes() {
   Object.keys(nodes).forEach(function(key) {
     nodes[key].visited = false
     nodes[key].cameFrom = NaN
   })
 }
-
+// looking for direction and shortest path
 function getPathDirection(start, target) {
   cleanNodes()
   var listToExplore = [start]
 
   nodes[start].visited = true
 
-  while (listToExplore.length > 0 ) {
+  while (listToExplore.length > 0) {
     var nodeIndex = listToExplore.shift()
 
     for (let i=0; i<nodes[nodeIndex].links.length; i++) {
-      let childIndex = nodes[nodeIndex].links[i]
-      if (!nodes[childIndex].visited) { // should be 1 number but returns 2
+      const childIndex = nodes[nodeIndex].links[i]
+      if (!nodes[childIndex].visited) {
         nodes[childIndex].visited = true
         nodes[childIndex].cameFrom = nodeIndex
         listToExplore.push(childIndex)
@@ -236,4 +242,56 @@ function getPathDirection(start, target) {
   }
 }
 
-//getPathDirection([1,1], [5, 1])
+//ghost constructor================================================
+function Ghost (color, ghostClass, image, position, speed) {
+  this.color = color
+  this.class = ghostClass
+  this.image = image
+  this.position = position
+  this.speed = speed
+  this.chasing = true
+}
+const inky = new Ghost('blue', 'inky', 'img', [6, 7], 300)
+const pinky = new Ghost('pink', 'pinky', 'img', [6, 10], 500)
+const blinky = new Ghost('red', 'blinky', 'img', [9, 7], 400)
+const clyde = new Ghost('yellow', 'clyde', 'img', [9, 10], 400)
+
+tiles[inky.position[0]][inky.position[1]].classList.add('inky')
+tiles[pinky.position[0]][pinky.position[1]].classList.add('pinky')
+tiles[blinky.position[0]][blinky.position[1]].classList.add('blinky')
+tiles[clyde.position[0]][clyde.position[1]].classList.add('clyde')
+
+//moving ghosts==================================================
+function ghostMovement (ghost) {
+  setInterval(function() {
+    tiles[ghost.position[0]][ghost.position[1]].classList.remove(ghost.class)
+    const goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([yAxis, xAxis]))
+    console.log(goTo)
+    tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+    // console.log(goTo)
+    ghost.position[0] = goTo[0]
+    ghost.position[1] = goTo[1]
+    tiles[ghost.position[0]][ghost.position[1]].classList.add(ghost.class)
+    console.log(ghost.ghost.class)
+  }, ghost.speed)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
