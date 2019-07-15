@@ -148,3 +148,9 @@ button {
   background-image: url('https://i.imgur.com/RkZQmH3.png');
   background-size: cover;
 }
+.emptyLife {
+  background-image: none;
+}
+.gameOver {
+  font-size: 30px;
+}

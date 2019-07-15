@@ -7,7 +7,6 @@ const livesCounter = document.querySelector('.lives')
 const timer = document.querySelector('.countdown')
 const lifeOne = document.querySelector('.lifeOne')
 const lifeTwo = document.querySelector('.lifeTwo')
-const lifeThree = document.querySelector('.lifeThree')
 
 // position of pacman====================================
 // yAxis is a row
@@ -31,6 +30,7 @@ function startGame() {
   gameboard.style.display = 'flex'
   popupMenu.style.display = 'none'
   timer.style.display = 'block'
+  setGhostsLocation()
   timerId = setInterval(countdown, 1000)
   setTimeout(function(){
     clearInterval(timerId)
@@ -42,14 +42,63 @@ function startGame() {
   }, 4500)
   setTimeout(startGhosts, 4500)
 }
+// restart game =======================================================
+function restart() {
+  tiles[yAxis][xAxis].classList.remove('pacman')
+  yAxis = 16
+  xAxis = 9
+  tiles[yAxis][xAxis].classList.add('pacman')
+  arrayOfGhosts.forEach(function(item){
+    tiles[item.position[0]][item.position[1]].classList.remove(item.class)
+    tiles[item.position[0]][item.position[1]].classList.remove('ghost')
+  })
+  inky.position = [6, 7]
+  pinky.position = [6, 10]
+  blinky.position = [9, 7]
+  clyde.position = [9, 10]
+  setGhostsLocation()
+  document.removeEventListener('keyup', pacMove)
+  timer.style.display = 'block'
+  timer.innerHTML = 'Start!'
+  setTimeout(function(){
+    timer.style.display = 'none'
+    document.addEventListener('keyup', pacMove)
+  }, 2000)
+  setTimeout(function(){
+    startGhosts()
+  }, 2000)
 
+
+
+}
 // pacman interacting with ghosts ======================================
 let lives = 3
+function gameOver () {
+  timer.style.display = 'block'
+  timer.classList.add('gameOver')
+  timer.innerHTML = 'Game over! Your score is '+ score
+  document.removeEventListener('keyup', pacMove)
+}
+
+let killedGhosts = 1
 
 function interactingWithGhost(){
-  if (lives === 3) {
-    lives--
-    livesCounter.style.backgroundImage = 'none'
+  if(inky.chasing) {
+    if (lives === 3) {
+      lives--
+      lifeTwo.style.backgroundImage = 'none'
+      restart()
+    } else if (lives === 2) {
+      lives--
+      lifeOne.style.backgroundImage = 'none'
+      restart()
+    } else if (lives === 1) {
+      lives--
+      gameOver()
+    }
+  } else {
+    score += (killedGhosts * 200)
+    killedGhosts+= 1
   }
 }
 // creating board===========================================
@@ -97,10 +146,10 @@ const levelOne = [
 
 // assigning walls======================================
 for (let i = 0; i<height; i++) {
-  let gamerow = levelOne[i]
-  let divrow = tiles[i]
+  const gamerow = levelOne[i]
+  const divrow = tiles[i]
   for (let j = 0; j<width; j++) {
-    let item = gamerow[j]
+    const item = gamerow[j]
     if (item === 1) {
       divrow[j].classList.add('wall')
     } else if(item === 0){
@@ -144,11 +193,13 @@ function pacMove(e) {
       break
   }
   if(tiles[yAxis][xAxis].classList.contains('ghost')) {
-    clearInterval(inky.timerId)
-    clearInterval(blinky.timerId)
-    clearInterval(pinky.timerId)
-    clearInterval(clyde.timerId)
+    arrayOfGhosts.forEach(function (ghostInArray) {
+      clearInterval(ghostInArray.timerId)
+    })
+    interactingWithGhost()
+
   }
+
   // pacman eating dots===================
   if(tiles[yAxis][xAxis].classList.contains('dot')) {
     tiles[yAxis][xAxis].classList.remove('dot')
@@ -158,15 +209,14 @@ function pacMove(e) {
     tiles[yAxis][xAxis].classList.remove('energizer')
     score+=50
     scoreCounter.innerHTML = score
-    inky.chasing = false
-    blinky.chasing = false
-    pinky.chasing = false
-    clyde.chasing = false
+    // ghosts start to run away
+    arrayOfGhosts.forEach(function (ghostInArray) {
+      ghostInArray.chasing = false
+    })
     setTimeout(function (){
-      inky.chasing = true
-      blinky.chasing = true
-      pinky.chasing = true
-      clyde.chasing = true
+      arrayOfGhosts.forEach(function (ghostInArray) {
+        ghostInArray.chasing = true
+      })
     }, 3000)
 
   }
@@ -295,14 +345,19 @@ const pinky = new Ghost('pink', 'pinky', 'img', [6, 10], 500)
 const blinky = new Ghost('red', 'blinky', 'img', [9, 7], 250)
 const clyde = new Ghost('yellow', 'clyde', 'img', [9, 10], 400)
 
-tiles[inky.position[0]][inky.position[1]].classList.add('inky')
-tiles[inky.position[0]][inky.position[1]].classList.add('ghost')
-tiles[pinky.position[0]][pinky.position[1]].classList.add('pinky')
-tiles[pinky.position[0]][pinky.position[1]].classList.add('ghost')
-tiles[blinky.position[0]][blinky.position[1]].classList.add('blinky')
-tiles[blinky.position[0]][blinky.position[1]].classList.add('ghost')
-tiles[clyde.position[0]][clyde.position[1]].classList.add('clyde')
-tiles[clyde.position[0]][clyde.position[1]].classList.add('ghost')
+const arrayOfGhosts = []
+arrayOfGhosts.push(inky, pinky, blinky, clyde)
+
+function setGhostsLocation () {
+  tiles[inky.position[0]][inky.position[1]].classList.add('inky')
+  tiles[inky.position[0]][inky.position[1]].classList.add('ghost')
+  tiles[pinky.position[0]][pinky.position[1]].classList.add('pinky')
+  tiles[pinky.position[0]][pinky.position[1]].classList.add('ghost')
+  tiles[blinky.position[0]][blinky.position[1]].classList.add('blinky')
+  tiles[blinky.position[0]][blinky.position[1]].classList.add('ghost')
+  tiles[clyde.position[0]][clyde.position[1]].classList.add('clyde')
+  tiles[clyde.position[0]][clyde.position[1]].classList.add('ghost')
+}
 
 //moving ghosts==================================================
 
@@ -315,7 +370,7 @@ function ghostMovement (ghost) {
     if(ghost.chasing !== false) { // if the ghost is chsing pacman it moves to it
       goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([yAxis, xAxis]))
       tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
-    } else { // if ghost is not chasing it goes th opposite direction
+    } else { // if ghost is not chasing it goes th opposite direction !!!!!!!!!!!!!!!!!!!!!!!!!!!not good as it could be wall
       goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([xAxis, yAxis]))
       tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
     }
@@ -325,10 +380,10 @@ function ghostMovement (ghost) {
     tiles[ghost.position[0]][ghost.position[1]].classList.add('ghost')
     // ghosts and pacman in one tile
     if(tiles[ghost.position[0]][ghost.position[1]].classList.contains('pacman')) {
-      clearInterval(inky.timerId)
-      clearInterval(blinky.timerId)
-      clearInterval(pinky.timerId)
-      clearInterval(clyde.timerId)
+      interactingWithGhost()
+      arrayOfGhosts.forEach(function (ghostInArray) {
+        clearInterval(ghostInArray.timerId)
+      })
     }
 
   }, ghost.speed)
