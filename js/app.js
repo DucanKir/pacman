@@ -3,19 +3,17 @@ const menu = document.querySelector('.popupMenu')
 const scoreCounter = document.querySelector('.score')
 const startBtn = document.querySelector('.startBtn')
 const popupMenu = document.querySelector('.popupMenu')
-const lives = document.querySelector('.lives')
+const livesCounter = document.querySelector('.lives')
 const timer = document.querySelector('.countdown')
+const lifeOne = document.querySelector('.lifeOne')
+const lifeTwo = document.querySelector('.lifeTwo')
+const lifeThree = document.querySelector('.lifeThree')
 
 // position of pacman====================================
 // yAxis is a row
 let yAxis = 16
 // xAxis is a column
 let xAxis = 9
-//position of ghosts=====================================
-let yAxisGhost = 6
-let xAxisGhost = 8
-
-
 
 //size of gameboard
 const width = 18
@@ -25,6 +23,10 @@ let score = 0
 let timerId = NaN
 
 //start game================================================
+function countdown () {
+  timer.innerHTML -=1
+}
+
 function startGame() {
   gameboard.style.display = 'flex'
   popupMenu.style.display = 'none'
@@ -36,13 +38,19 @@ function startGame() {
   }, 4000)
   setTimeout(function(){
     timer.style.display = 'none'
+    document.addEventListener('keyup', pacMove)
   }, 4500)
   setTimeout(startGhosts, 4500)
-
 }
 
-function countdown () {
-  timer.innerHTML -=1
+// pacman interacting with ghosts ======================================
+let lives = 3
+
+function interactingWithGhost(){
+  if (lives === 3) {
+    lives--
+    livesCounter.style.backgroundImage = 'none'
+  }
 }
 // creating board===========================================
 // bard consists of 18 arrays(rows) with 18 divs in each row
@@ -135,7 +143,13 @@ function pacMove(e) {
       direction = 'pacmanMoveDown'
       break
   }
-  // pacman eating dots====================================
+  if(tiles[yAxis][xAxis].classList.contains('ghost')) {
+    clearInterval(inky.timerId)
+    clearInterval(blinky.timerId)
+    clearInterval(pinky.timerId)
+    clearInterval(clyde.timerId)
+  }
+  // pacman eating dots===================
   if(tiles[yAxis][xAxis].classList.contains('dot')) {
     tiles[yAxis][xAxis].classList.remove('dot')
     score+=10
@@ -144,6 +158,17 @@ function pacMove(e) {
     tiles[yAxis][xAxis].classList.remove('energizer')
     score+=50
     scoreCounter.innerHTML = score
+    inky.chasing = false
+    blinky.chasing = false
+    pinky.chasing = false
+    clyde.chasing = false
+    setTimeout(function (){
+      inky.chasing = true
+      blinky.chasing = true
+      pinky.chasing = true
+      clyde.chasing = true
+    }, 3000)
+
   }
   tiles[yAxis][xAxis].classList.add('pacman')
   tiles[yAxis][xAxis].classList.add(direction)
@@ -245,7 +270,7 @@ function getPathDirection(start, target) {
 
         while (true) {
           if (String(nodes[lastNodeIndex].cameFrom) === String(start)) {
-            return lastNodeIndex
+            return lastNodeIndex // tells ghost in which direction to move
           }
           lastNodeIndex = nodes[lastNodeIndex].cameFrom
         }
@@ -263,6 +288,7 @@ function Ghost (color, ghostClass, image, position, speed) {
   this.position = position
   this.speed = speed
   this.chasing = true
+  this.timerId = NaN
 }
 const inky = new Ghost('blue', 'inky', 'img', [6, 7], 300)
 const pinky = new Ghost('pink', 'pinky', 'img', [6, 10], 500)
@@ -270,19 +296,41 @@ const blinky = new Ghost('red', 'blinky', 'img', [9, 7], 250)
 const clyde = new Ghost('yellow', 'clyde', 'img', [9, 10], 400)
 
 tiles[inky.position[0]][inky.position[1]].classList.add('inky')
+tiles[inky.position[0]][inky.position[1]].classList.add('ghost')
 tiles[pinky.position[0]][pinky.position[1]].classList.add('pinky')
+tiles[pinky.position[0]][pinky.position[1]].classList.add('ghost')
 tiles[blinky.position[0]][blinky.position[1]].classList.add('blinky')
+tiles[blinky.position[0]][blinky.position[1]].classList.add('ghost')
 tiles[clyde.position[0]][clyde.position[1]].classList.add('clyde')
+tiles[clyde.position[0]][clyde.position[1]].classList.add('ghost')
 
 //moving ghosts==================================================
+
+
 function ghostMovement (ghost) {
-  setInterval(function() {
+  ghost.timerId = setInterval(function() {
     tiles[ghost.position[0]][ghost.position[1]].classList.remove(ghost.class)
-    const goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([yAxis, xAxis]))
-    tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+    tiles[ghost.position[0]][ghost.position[1]].classList.remove('ghost')
+    let goTo
+    if(ghost.chasing !== false) { // if the ghost is chsing pacman it moves to it
+      goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([yAxis, xAxis]))
+      tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+    } else { // if ghost is not chasing it goes th opposite direction
+      goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([xAxis, yAxis]))
+      tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+    }
     ghost.position[0] = goTo[0]
     ghost.position[1] = goTo[1]
     tiles[ghost.position[0]][ghost.position[1]].classList.add(ghost.class)
+    tiles[ghost.position[0]][ghost.position[1]].classList.add('ghost')
+    // ghosts and pacman in one tile
+    if(tiles[ghost.position[0]][ghost.position[1]].classList.contains('pacman')) {
+      clearInterval(inky.timerId)
+      clearInterval(blinky.timerId)
+      clearInterval(pinky.timerId)
+      clearInterval(clyde.timerId)
+    }
+
   }, ghost.speed)
 }
 
@@ -293,7 +341,7 @@ function startGhosts () {
   ghostMovement(clyde)
 }
 
-document.addEventListener('keyup', pacMove)
+
 startBtn.addEventListener('click', startGame)
 
 
