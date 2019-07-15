@@ -15,8 +15,22 @@ body {
 .gameboard {
   width: 600px;
   height: 600px;
-  display: flex;
+  display: none;
   flex-wrap: wrap;
+}
+.countdown {
+  display: none;
+  position: absolute;
+  width: 300px;
+  height: 150px;
+  color: white;
+  font-size: 100px;
+  text-align: center;
+  margin: 150px;
+  margin-top: 220px;
+  padding-top: 23px;
+  background-color: rgba(255,255,255,0.2);
+
 }
 
 .tile {
@@ -33,7 +47,7 @@ h1 {
 }
 
 .popupMenu {
-  display: none;
+  display: flex;
   justify-content: center;
   padding-top: 250px;
   width: 600px;
@@ -87,21 +101,26 @@ h1 {
 }
 .blinky {
   background-color: red;
+  border: none;
 }
 .inky {
   background-color: blue;
+  border: none;
 }
 .clyde {
   background-color: orange;
+  border: none;
 }
 .pinky {
   background-color: pink;
+  border: none;
 }
 
 button {
   width: 150px;
   height: 100px;
-  font-size: 30px;
+  font-size: 50px;
+  font-family: 'Squada One';
 }
 .score {
  color: white;

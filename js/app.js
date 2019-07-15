@@ -4,6 +4,8 @@ const scoreCounter = document.querySelector('.score')
 const startBtn = document.querySelector('.startBtn')
 const popupMenu = document.querySelector('.popupMenu')
 const lives = document.querySelector('.lives')
+const timer = document.querySelector('.countdown')
+
 // position of pacman====================================
 // yAxis is a row
 let yAxis = 16
@@ -20,14 +22,28 @@ const width = 18
 const height = 18
 
 let score = 0
-
+let timerId = NaN
 
 //start game================================================
 function startGame() {
   gameboard.style.display = 'flex'
   popupMenu.style.display = 'none'
+  timer.style.display = 'block'
+  timerId = setInterval(countdown, 1000)
+  setTimeout(function(){
+    clearInterval(timerId)
+    timer.innerHTML = 'Start!'
+  }, 4000)
+  setTimeout(function(){
+    timer.style.display = 'none'
+  }, 4500)
+  setTimeout(startGhosts, 4500)
+
 }
 
+function countdown () {
+  timer.innerHTML -=1
+}
 // creating board===========================================
 // bard consists of 18 arrays(rows) with 18 divs in each row
 const tiles = []
@@ -135,9 +151,6 @@ function pacMove(e) {
     tiles[yAxis][xAxis].classList.remove(direction)
   }, 100)
 }
-
-document.addEventListener('keyup', pacMove)
-// startBtn.addEventListener('click', startGame)
 
 
 //bfs for ghosts movement==================================
@@ -253,7 +266,7 @@ function Ghost (color, ghostClass, image, position, speed) {
 }
 const inky = new Ghost('blue', 'inky', 'img', [6, 7], 300)
 const pinky = new Ghost('pink', 'pinky', 'img', [6, 10], 500)
-const blinky = new Ghost('red', 'blinky', 'img', [9, 7], 400)
+const blinky = new Ghost('red', 'blinky', 'img', [9, 7], 250)
 const clyde = new Ghost('yellow', 'clyde', 'img', [9, 10], 400)
 
 tiles[inky.position[0]][inky.position[1]].classList.add('inky')
@@ -266,32 +279,22 @@ function ghostMovement (ghost) {
   setInterval(function() {
     tiles[ghost.position[0]][ghost.position[1]].classList.remove(ghost.class)
     const goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([yAxis, xAxis]))
-    console.log(goTo)
     tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
-    // console.log(goTo)
     ghost.position[0] = goTo[0]
     ghost.position[1] = goTo[1]
     tiles[ghost.position[0]][ghost.position[1]].classList.add(ghost.class)
-    console.log(ghost.ghost.class)
   }, ghost.speed)
 }
 
+function startGhosts () {
+  ghostMovement(inky)
+  ghostMovement(blinky)
+  ghostMovement(pinky)
+  ghostMovement(clyde)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+document.addEventListener('keyup', pacMove)
+startBtn.addEventListener('click', startGame)
 
 
 //
