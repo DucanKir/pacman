@@ -7,7 +7,7 @@ const livesCounter = document.querySelector('.lives')
 const timer = document.querySelector('.countdown')
 const lifeOne = document.querySelector('.lifeOne')
 const lifeTwo = document.querySelector('.lifeTwo')
-
+//121
 // position of pacman====================================
 // yAxis is a row
 let yAxis = 16
@@ -45,6 +45,7 @@ function startGame() {
 // restart game =======================================================
 function restart() {
   tiles[yAxis][xAxis].classList.remove('pacman')
+  killedGhosts = 1
   yAxis = 16
   xAxis = 9
   tiles[yAxis][xAxis].classList.add('pacman')
@@ -138,8 +139,8 @@ const levelOne = [
   [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
   [1, 5, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 5, 1],
   [1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1],
-  [1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1],
-  [1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+  [1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1],
+  [1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
@@ -203,6 +204,7 @@ function pacMove(e) {
   // pacman eating dots===================
   if(tiles[yAxis][xAxis].classList.contains('dot')) {
     tiles[yAxis][xAxis].classList.remove('dot')
+
     score+=10
     scoreCounter.innerHTML = score
   } else if(tiles[yAxis][xAxis].classList.contains('energizer')){
@@ -225,6 +227,7 @@ function pacMove(e) {
   setTimeout(function() {
     tiles[yAxis][xAxis].classList.remove(direction)
   }, 100)
+  console.log(score)
 }
 
 
@@ -371,8 +374,19 @@ function ghostMovement (ghost) {
       goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([yAxis, xAxis]))
       tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
     } else { // if ghost is not chasing it goes th opposite direction !!!!!!!!!!!!!!!!!!!!!!!!!!!not good as it could be wall
-      goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([xAxis, yAxis]))
-      tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+      if (yAxis < height/2 && xAxis <width/2) {
+        goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([16, 16]))
+        tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+      } else if (yAxis > height/2 && xAxis < width/2) {
+        goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([1, 16]))
+        tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+      } else if (yAxis < height/2 && xAxis > width/2) {
+        goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([16, 1]))
+        tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+      } else {
+        goTo = getPathDirection([ghost.position[0], ghost.position[1]], ([1, 1]))
+        tiles[goTo[0]][goTo[1]].classList.add(ghost.class)
+      }
     }
     ghost.position[0] = goTo[0]
     ghost.position[1] = goTo[1]
