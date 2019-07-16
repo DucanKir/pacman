@@ -1,3 +1,4 @@
+const body = document.querySelector('body')
 const gameboard = document.querySelector('.gameboard')
 const menu = document.querySelector('.popupMenu')
 const scoreCounter = document.querySelector('.score')
@@ -8,6 +9,17 @@ const timer = document.querySelector('.countdown')
 const lifeOne = document.querySelector('.lifeOne')
 const lifeTwo = document.querySelector('.lifeTwo')
 const newGameBtn = document.querySelector('.newGameContinue')
+//sounds=====================================================================
+const pacmanMovingSound = document.createElement('audio')
+pacmanMovingSound.src = 'sounds/pacman_chomp.wav'
+const pacmanDyingSound = document.createElement('audio')
+pacmanDyingSound.src = 'sounds/pacman_death.wav'
+const pacmanEatingGhostSound = document.createElement('audio')
+pacmanEatingGhostSound.src = 'sounds/pacman_eatghost.wav'
+const openingSound = document.createElement('audio')
+openingSound.src = 'sounds/pacman_beginning.wav'
+
+
 
 let arrayOfGhosts = []
 
@@ -123,6 +135,7 @@ function startGame() {
       item.speed += 50
     })
   }
+  openingSound.play()
 }
 // restart game =======================================================
 // when pacman is attaced by ghosts
@@ -145,6 +158,7 @@ function gameOver () {
   timer.classList.add('gameOver')
   timer.innerHTML = 'Game over!<br> Your score is '+ score
   document.removeEventListener('keyup', pacMove)
+  tiles[yAxis][xAxis].classList.remove('ghost')
   stopGhostsTimer()
   newGameBtn.style.display = 'block'
   newGameBtn.innerHTML = 'New game'
@@ -194,6 +208,7 @@ let lives = 3
 function checkForCollision() {
   if (tiles[yAxis][xAxis].classList.contains('ghost')) {
     if(arrayOfGhosts[0].chasing) { // if ghosts are chasing pacman he gets -1 life
+      pacmanDyingSound.play()
       if (lives === 3) {
         lives--
         lifeTwo.style.backgroundImage = 'none'
@@ -210,6 +225,7 @@ function checkForCollision() {
       // each killed ghost gives killedGhosts*200 points
       score += (killedGhosts * 200)
       killedGhosts+= 1
+      pacmanEatingGhostSound.play()
     }
     console.log(lives)
   }
@@ -218,7 +234,6 @@ function checkForCollision() {
 function resetGhosts(ghost) {
   if (ghost.chasing) {
     stopGhostsTimer()
-
   } else if(tiles[yAxis][xAxis].classList.contains(ghost.class)) {
     clearInterval(ghost.timerId)
     tiles[ghost.position[0]][ghost.position[1]].classList.remove(ghost.class)
@@ -276,6 +291,7 @@ function pacMove(e) {
   // pacman eating dots===================
 
   if(tiles[yAxis][xAxis].classList.contains('dot')) {
+    pacmanMovingSound.play()
     tiles[yAxis][xAxis].classList.remove('dot')
     totalDots++
     score+=10
