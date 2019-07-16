@@ -7,6 +7,8 @@ const livesCounter = document.querySelector('.lives')
 const timer = document.querySelector('.countdown')
 const lifeOne = document.querySelector('.lifeOne')
 const lifeTwo = document.querySelector('.lifeTwo')
+const newGameBtn = document.querySelector('.newGameContinue')
+
 let arrayOfGhosts = []
 
 // level design=============================================================
@@ -38,19 +40,21 @@ const levelOne = [
 ]
 
 // creating board========================================================
-const tiles = [] //array of dives
+let tiles = [] //array of dives
 
 function createBoard() {
-  // bard consists of 18 arrays(rows) with 18 divs in each row
-  for (let i = 0; i<height; i++) {
-    const row = []
-    for (let i = 0; i<width; i++) {
-      const tile = document.createElement('div')
-      tile.classList.add('tile')
-      gameboard.appendChild(tile)
-      row.push(tile)
+    // bard consists of 18 arrays(rows) with 18 divs in each row
+  if(tiles.length === 0) {
+    for (let i = 0; i<height; i++) {
+      const row = []
+      for (let i = 0; i<width; i++) {
+        const tile = document.createElement('div')
+        tile.classList.add('tile')
+        gameboard.appendChild(tile)
+        row.push(tile)
+      }
+      tiles.push(row)
     }
-    tiles.push(row)
   }
   // assigning walls, dots and energizers==================================
   for (let i = 0; i<height; i++) {
@@ -75,9 +79,10 @@ let xAxis = 9 // xAxis is a column
 //size of gameboard
 const width = 18
 const height = 18
-
+let level = 1
 let score = 0
 let timerId = NaN
+
 //start game===============================================================
 function countdown () {
   timer.innerHTML -=1
@@ -85,11 +90,23 @@ function countdown () {
 
 function startGame() {
   createBoard()
-  tiles[yAxis][xAxis].classList.add('pacman')
-  gameboard.style.display = 'flex'
   popupMenu.style.display = 'none'
+  newGameBtn.style.display = 'none'
+  gameboard.style.display = 'flex'
+  timer.classList.remove('gameOver')
   timer.style.display = 'block'
+  if(level === 1) {
+    score = 0
+  }
+  scoreCounter.innerHTML = score
+  totalDots = 0
+  killedGhosts = 1
+  lives = 3
+  lifeOne.style.backgroundImage = 'url(https://i.imgur.com/RkZQmH3.png)'
+  lifeTwo.style.backgroundImage = 'url(https://i.imgur.com/RkZQmH3.png)'
+  timer.innerHTML = 3
   setGhostsLocation()
+  initialPosition()
   timerId = setInterval(countdown, 1000)
   setTimeout(function(){
     clearInterval(timerId)
@@ -100,6 +117,12 @@ function startGame() {
     document.addEventListener('keyup', pacMove)
   }, 4500)
   setTimeout(startGhosts, 4500)
+  setInterval(checkForCollision, 100)
+  if (level > 1) {
+    arrayOfGhosts.forEach(function(item) {
+      item.speed += 50
+    })
+  }
 }
 // restart game =======================================================
 // when pacman is attaced by ghosts
@@ -117,27 +140,30 @@ function restartGame() {
   }, 2000)
 }
 // Game over when 0 lives left ======================================
-let lives = 3
 function gameOver () {
   timer.style.display = 'block'
   timer.classList.add('gameOver')
-  timer.innerHTML = 'Game over! Your score is '+ score // add start again button????????????????????????????????
+  timer.innerHTML = 'Game over!<br> Your score is '+ score
   document.removeEventListener('keyup', pacMove)
   stopGhostsTimer()
-
+  newGameBtn.style.display = 'block'
+  newGameBtn.innerHTML = 'New game'
+  level = 1
 }
-// level complete when totalDots === 121=============================
+// level complete when totalDots = 124=============================
 let totalDots = 0 // counting dots for winnind condition
 
 function levelCompete() {
   document.removeEventListener('keyup', pacMove)
   timer.style.display = 'block'
   timer.classList.add('gameOver')
-  timer.innerHTML = 'Level complete! Your score is '+ score
-  score = 0
+  timer.innerHTML = 'Level complete!<br>Your score is '+ score
   scoreCounter.innerHTML = score
   initialPosition()
-  stopGhostsTimer() // add new levels ??????????????????????????????????????
+  stopGhostsTimer()
+  level+=1
+  newGameBtn.style.display = 'block'
+  newGameBtn.innerHTML = 'Start level<br>'+level
 }
 function stopGhostsTimer() {
   arrayOfGhosts.forEach(function (ghostInArray) {
@@ -163,39 +189,49 @@ function initialPosition() {
 }
 // pacman colliding with ghosts===========================================
 let killedGhosts = 1
+let lives = 3
 
-function interactingWithGhost(){
-  if(arrayOfGhosts[0].chasing) { // if ghosts are chasing pacman he gets - 1 life
-    if (lives === 3) {
-      lives--
-      lifeTwo.style.backgroundImage = 'none'
-      restartGame()
-    } else if (lives === 2) {
-      lives--
-      lifeOne.style.backgroundImage = 'none'
-      restartGame()
-    } else if (lives === 1) {
-      lives--
-      gameOver()
+function checkForCollision() {
+  if (tiles[yAxis][xAxis].classList.contains('ghost')) {
+    if(arrayOfGhosts[0].chasing) { // if ghosts are chasing pacman he gets -1 life
+      if (lives === 3) {
+        lives--
+        lifeTwo.style.backgroundImage = 'none'
+        restartGame()
+      } else if (lives === 2) {
+        lives--
+        lifeOne.style.backgroundImage = 'none'
+        restartGame()
+      } else if (lives === 1) {
+        lives--
+        gameOver()
+      }
+    } else { // if ghosts are running away pacman gets points
+      // each killed ghost gives killedGhosts*200 points
+      score += (killedGhosts * 200)
+      killedGhosts+= 1
     }
-  } else { // if ghosts are running away pacman gets points
-    // each killed ghost gives killedGhosts*200 points
-    score += (killedGhosts * 200)
-    killedGhosts+= 1
+    console.log(lives)
   }
 }
-
 //reset ghost in case if pacman eats it===================================
 function resetGhosts(ghost) {
   if (ghost.chasing) {
     stopGhostsTimer()
-    interactingWithGhost()
+
   } else if(tiles[yAxis][xAxis].classList.contains(ghost.class)) {
     clearInterval(ghost.timerId)
     tiles[ghost.position[0]][ghost.position[1]].classList.remove(ghost.class)
     tiles[ghost.position[0]][ghost.position[1]].classList.remove('ghost')
-    ghost.position = [6, 7]
-    console.log(ghost.position)
+    if (ghost.class === 'inky') {
+      ghost.position = [6, 7]
+    } else if (ghost.class === 'pinky'){
+      ghost.position = [6, 10]
+    } else if (ghost.class === 'blinky'){
+      ghost.position = [9, 7]
+    } else {
+      ghost.position = [9, 10]
+    }
     tiles[ghost.position[0]][ghost.position[1]].classList.add(ghost.class)
     tiles[ghost.position[0]][ghost.position[1]].classList.add('ghost')
     setTimeout(function (){
@@ -235,6 +271,7 @@ function pacMove(e) {
   if(tiles[yAxis][xAxis].classList.contains('ghost')) {
     const ghost = arrayOfGhosts.find(ghost => tiles[yAxis][xAxis].classList.contains(ghost.class))
     resetGhosts(ghost)
+
   }
   // pacman eating dots===================
 
@@ -428,7 +465,6 @@ function ghostMovement (ghost) {
     tiles[ghost.position[0]][ghost.position[1]].classList.add('ghost')
     // ghosts and pacman in one tile
     if(tiles[ghost.position[0]][ghost.position[1]].classList.contains('pacman')) {
-      interactingWithGhost()
       resetGhosts(ghost)
     }
 
@@ -440,4 +476,5 @@ function startGhosts () {
 }
 
 startBtn.addEventListener('click', startGame)
+newGameBtn.addEventListener('click', startGame)
 //

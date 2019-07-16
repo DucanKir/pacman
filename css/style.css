@@ -154,3 +154,13 @@ button {
 .gameOver {
   font-size: 30px;
 }
+.newGameContinue {
+  display: none;
+  position: absolute;
+  top: 365px;
+  left: 43%;
+  width: 150px;
+  height: 40px;
+  font-size: 30px;
+  font-family: 'Squada One';
+}
