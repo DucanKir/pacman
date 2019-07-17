@@ -9,6 +9,20 @@ body {
   background-color: black;
   font-family: 'Squada One';
 }
+main {
+  position: relative;
+}
+.modal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
 .container {
   margin-top: 30px;
 }
@@ -20,15 +34,12 @@ body {
 }
 .countdown {
   display: none;
-  position: absolute;
+  flex-direction: column;
   width: 300px;
-  height: 150px;
+  height: 200px;
   color: white;
   font-size: 100px;
   text-align: center;
-  margin: 150px;
-  margin-top: 220px;
-  padding-top: 23px;
   background-color: rgba(255,255,255,0.2);
 
 }
@@ -37,6 +48,7 @@ body {
   width: calc(100%/18);
   height: calc(100%/18);
   border: 2px solid black;
+  color: white;
 }
 .wall {
   background: black;
@@ -48,8 +60,9 @@ h1 {
 
 .popupMenu {
   display: flex;
-  justify-content: center;
-  padding-top: 250px;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 150px;
   width: 600px;
   height: 600px;
   background-color: rgba(0,0,0,0.7);
@@ -100,20 +113,85 @@ h1 {
   transform: rotate(90deg);
 }
 .blinky {
-  background-color: red;
+  background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/ECgBMV7.png');
+  background-size: cover, cover;
+  background-position: 0px 1px, center;
+  background-size: 120%, 70%;
+  background-repeat: no-repeat;
   border: none;
+  background-color: transparent;
+  animation-duration: 0.1s;
+  animation-name: blinkyeMovingRight;
+}
+@keyframes clydeMovingRight{
+    0%   {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/ECgBMV7.png');}
+    100% {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/G4KHH04.png');}
 }
 .inky {
-  background-color: blue;
+  background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/DxQCghZ.png');
+  background-size: cover, cover;
+  background-position: 0px 1px, center;
+  background-size: 120%, 70%;
+  background-repeat: no-repeat;
+  border: none;
+  background-color: transparent;
+  animation-duration: 0.1s;
+  animation-name: inkyMovingRight;
   border: none;
 }
+@keyframes inkyMovingRight{
+    0%   {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/DxQCghZ.png');}
+    100% {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/Y8iLUYR.png');}
+}
+
 .clyde {
-  background-color: orange;
+  background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/cHe9cex.png');
+  background-size: cover, cover;
+  background-position: 0px 1px, center;
+  background-size: 120%, 70%;
+  background-repeat: no-repeat;
+  border: none;
+  background-color: transparent;
+  animation-duration: 0.1s;
+  animation-name: clydeMovingRight;
+}
+@keyframes clydeMovingRight{
+    0%   {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/cHe9cex.png');}
+    100% {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/NDRcpY9.png');}
+}
+
+.pinky {
+    background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/0lj2px2.png');
+    background-size: cover, cover;
+    background-position: 0px 1px, center;
+    background-size: 120%, 70%;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: transparent;
+    animation-duration: 0.1s;
+    animation-name: pinkyMovingRight;
+    border: none;
+  }
+@keyframes pinkyMovingRight{
+      0%   {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/0lj2px2.png');}
+      100% {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/bmpUPhL.png');}
+  }
+
+.scaredGhost {
+  background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/c1PPntU.png');
+  background-size: cover, cover;
+  background-position: 0px 1px, center;
+  background-size: 120%, 70%;
+  background-repeat: no-repeat;
+  border: none;
+  background-color: transparent;
+  animation-duration: 0.1s;
+  animation-name: scaredMovingRight;
   border: none;
 }
-.pinky {
-  background-color: pink;
-  border: none;
+@keyframes scaredMovingRight{
+    0%   {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/c1PPntU.png');}
+    100% {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/OXY8jEc.png');}
 }
 
 button {
@@ -121,6 +199,7 @@ button {
   height: 100px;
   font-size: 50px;
   font-family: 'Squada One';
+  z-index: 2;
 }
 .score {
  color: white;
@@ -156,11 +235,15 @@ button {
 }
 .newGameContinue {
   display: none;
-  position: absolute;
-  top: 365px;
-  left: 43%;
-  width: 150px;
+  width: 200px;
   height: 40px;
   font-size: 30px;
   font-family: 'Squada One';
+}
+.portal {
+  background-color: green;
+}
+img {
+  width: 100%;
+  margin-bottom: 50px;
 }
