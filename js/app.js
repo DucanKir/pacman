@@ -1,3 +1,4 @@
+
 const body = document.querySelector('body')
 const gameboard = document.querySelector('.gameboard')
 const menu = document.querySelector('.popupMenu')
@@ -232,17 +233,13 @@ function resetGhosts(ghost) {
     pacmanEatingGhostSound.play()
     killedGhosts+= 1
     score += (killedGhosts * 200)
-    console.log(killedGhosts)
+    const posX = ghost.position[0]
+    const posY = ghost.position[1]
     tiles[ghost.position[0]][ghost.position[1]].classList.remove(ghost.class)
     tiles[ghost.position[0]][ghost.position[1]].classList.remove('ghost')
-    tiles[ghost.position[0]][ghost.position[1]].innerHTML = 200*killedGhosts
+    tiles[posX][posY].innerHTML = 200*killedGhosts       /////////////////////////////
     setTimeout(function(){
-      for(let i = 0; i<height; i++) {
-        const item = tiles[i]
-        for (let j = 0; j<height; j++){
-          item[j]  .innerHTML = ''
-        }
-      }
+      tiles[posX][posY].innerHTML = ''
     }, 1000)
     ghost.resetPosition()
     tiles[ghost.position[0]][ghost.position[1]].classList.add(ghost.class)
@@ -300,6 +297,8 @@ function pacMove(e) {
     score+=50
     totalDots++
     scoreCounter.innerHTML = score
+
+    // remove ghosts first
     // ghosts start to run away
     arrayOfGhosts.forEach(function (ghostInArray) {
       ghostInArray.speed += 50
@@ -307,7 +306,6 @@ function pacMove(e) {
     })
     setTimeout(function (){
       arrayOfGhosts.forEach(function (ghostInArray) {
-
         ghostInArray.speed -= 50
         ghostInArray.chasing = true
       })
@@ -438,6 +436,7 @@ function Ghost (color, ghostClass, image, defaultPosition, speed) {
   this.defaultPosition = defaultPosition
 
   this.resetPosition = function () {
+    // clearInterval(this.timerId)
     this.position = this.defaultPosition.slice()
   }
 }
@@ -470,7 +469,7 @@ function getOppositeCorner() {
 //moving ghosts==================================================
 function ghostMovement (ghost) {
   ghost.timerId = setInterval(function() {
-    tiles[ghost.position[0]][ghost.position[1]].classList.remove(ghost.class)/////////////////////////////////////////
+    tiles[ghost.position[0]][ghost.position[1]].classList.remove(ghost.class)
     tiles[ghost.position[0]][ghost.position[1]].classList.remove('ghost')
     let goTo
     if(ghost.chasing !== false) { // if the ghost is chasing pacman it moves towards it

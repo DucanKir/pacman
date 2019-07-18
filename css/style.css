@@ -35,12 +35,13 @@ main {
 .countdown {
   display: none;
   flex-direction: column;
+  justify-content: center;
   width: 300px;
-  height: 200px;
   color: white;
   font-size: 100px;
   text-align: center;
   background-color: rgba(255,255,255,0.2);
+  padding: 30px;
 
 }
 
@@ -52,17 +53,22 @@ main {
 }
 .wall {
   background: black;
-  border: 3px solid blue;
+  border: 3px solid #314afc;
 }
 h1 {
   text-align: center;
+}
+.portal {
+  background-color: white;
+  border-left: 13px solid black;
+  border-right: 13px solid black;
 }
 
 .popupMenu {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 150px;
+  padding-top: 100px;
   width: 600px;
   height: 600px;
   background-color: rgba(0,0,0,0.7);
@@ -115,7 +121,7 @@ h1 {
 .blinky {
   background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/ECgBMV7.png');
   background-size: cover, cover;
-  background-position: 0px 1px, center;
+  background-position: -3px 1px, center;
   background-size: 120%, 70%;
   background-repeat: no-repeat;
   border: none;
@@ -130,7 +136,7 @@ h1 {
 .inky {
   background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/DxQCghZ.png');
   background-size: cover, cover;
-  background-position: 0px 1px, center;
+  background-position: -3px 1px, center;
   background-size: 120%, 70%;
   background-repeat: no-repeat;
   border: none;
@@ -147,7 +153,7 @@ h1 {
 .clyde {
   background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/cHe9cex.png');
   background-size: cover, cover;
-  background-position: 0px 1px, center;
+  background-position: -3px 1px, center;
   background-size: 120%, 70%;
   background-repeat: no-repeat;
   border: none;
@@ -163,7 +169,7 @@ h1 {
 .pinky {
     background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/0lj2px2.png');
     background-size: cover, cover;
-    background-position: 0px 1px, center;
+    background-position: -3px 1px, center;
     background-size: 120%, 70%;
     background-repeat: no-repeat;
     border: none;
@@ -174,13 +180,13 @@ h1 {
   }
 @keyframes pinkyMovingRight{
       0%   {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/0lj2px2.png');}
-      100% {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/bmpUPhL.png');}
+      50% {background-image: url('https://i.imgur.com/v5tjrAC.png'), url('https://i.imgur.com/bmpUPhL.png');}
   }
 
 .scaredGhost {
   background-image:  url('https://i.imgur.com/v5tjrAC.png'),url('https://i.imgur.com/c1PPntU.png');
   background-size: cover, cover;
-  background-position: 0px 1px, center;
+  background-position: -3px 1px, center;
   background-size: 120%, 70%;
   background-repeat: no-repeat;
   border: none;
@@ -240,10 +246,8 @@ button {
   font-size: 30px;
   font-family: 'Squada One';
 }
-.portal {
-  background-color: green;
-}
+
 img {
   width: 100%;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
