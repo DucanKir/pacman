@@ -78,6 +78,7 @@ function createBoard() {
         divrow[j].classList.add('wall')
       } else if(item === 0){
         divrow[j].classList.add('dot')
+        divrow[j].innerHTML = '.'
       } else if (item === 5){
         divrow[j].classList.add('energizer')
       } else if (item === 6){
@@ -289,6 +290,7 @@ function pacMove(e) {
   if(tiles[yAxis][xAxis].classList.contains('dot')) {
     pacmanMovingSound.play()
     tiles[yAxis][xAxis].classList.remove('dot')
+    tiles[yAxis][xAxis].innerHTML =''
     totalDots++
     score+=10
     scoreCounter.innerHTML = score

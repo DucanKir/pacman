@@ -31,6 +31,9 @@ main {
   height: 600px;
   display: none;
   flex-wrap: wrap;
+  background-image: url(https://i.imgur.com/oFw8CcV.png);
+  background-position: center;
+  background-size: 104%;
 }
 .countdown {
   display: none;
@@ -48,20 +51,17 @@ main {
 .tile {
   width: calc(100%/18);
   height: calc(100%/18);
-  border: 2px solid black;
+  border: 2px solid transparent;
   color: white;
 }
 .wall {
-  background: black;
-  border: 3px solid #314afc;
+
+  border: 3px solid #transparent;
 }
 h1 {
   text-align: center;
 }
 .portal {
-  background-color: white;
-  border-left: 13px solid black;
-  border-right: 13px solid black;
 }
 
 .popupMenu {
@@ -91,8 +91,8 @@ h1 {
 }
 
 .dot {
-  background-color: white;
-  border: 15px solid black;
+text-align: center;
+font-size: 20px;
 }
 .pacman {
   width: calc(100%/18);
