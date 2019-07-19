@@ -54,6 +54,8 @@ yAxis is an id of row, xAxis is an id of column.
 
 ### Collision
 In this game there are different types of collision, each one has its own conditions. If Pac-Man eats dot - it gets 10 points and dot is removed from gameboard. Power Pellet gives 50 points and makes ghosts to run away from Pac-Man. In this case Pac-Man is able to eat ghost and gets 200 points for the first ghost, 400 pints for the next one, 800 points for the third ghost and so on. If ghosts are chasing the character and they rich it, then Pac-Man loses 1 life out of 3.
+![ezgif com-video-to-gif (3)](https://user-images.githubusercontent.com/51081298/61534160-ada10180-aa26-11e9-9de4-32cf4e2d8435.gif)
+
 
 ```js
 function checkForCollision() {
