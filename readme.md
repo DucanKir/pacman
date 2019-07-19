@@ -68,7 +68,7 @@ function checkForCollision() {
 ```
 
 ### Keypresses
-Pacman moves when you press arrow keys. It is not able to move through walls and can use fast track from one side of a game board to another. All movements are implemented by removing and adding CSS class from divs.
+Pacman moves when you press arrow keys. It is not able to move through walls and can use fast track from one side of a game board to another. All movements are implemented by removing and adding CSS class to divs.
 
 ```js
 function pacMove(e) {
