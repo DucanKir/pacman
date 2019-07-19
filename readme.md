@@ -21,7 +21,7 @@ Pac-Man is a maze arcade game, the player controls the character, as he must eat
 * Github
 * Google Fonts
 
-## Approach Taken
+## Approach Taken:
 ### Grid Layout
 For this game I used an array of divs, assigning class of different characters and items to this divs. The game board consists of 18 arrays with 18 divs in each array. With this approach it was easier to implement concept of coordinates.
 ``` js
@@ -50,7 +50,7 @@ const levelOne = [
 ```
 yAxis is an id of row, xAxis is an id of column.
 
-## Functionality
+## Functionality:
 
 ### Collision
 In this game there are different types of collision, each one has its own conditions. If Pac-Man eats dot - it gets 10 points and dot is removed from gameboard. Power Pellet gives 50 points and makes ghosts to run away from Pac-Man. In this case Pac-Man is able to eat ghost and gets 200 points for the first ghost, 400 pints for the next one, 800 points for the third ghost and so on. If ghosts are chasing the character and they rich it, then Pac-Man loses 1 life out of 3.
@@ -110,7 +110,7 @@ openingSound.play()
 }
 ```
 
-## Wins and Blockers
+## Wins and Blockers:
 
 The most difficult thing was to make ghosts chasing Pac-Man. I had to use basics of [BFS](https://en.wikipedia.org/wiki/Breadth-first_search) (Breadth-first search) algorithm. One function creates nodes for graph - it checks every div's class, if it is not a wall, it looks for every neighbour of div.
 ```js
@@ -161,5 +161,5 @@ function getPathDirection(start, target) {
 ```
 I felt more comfortable with JavaScript, CSS and HTML, learned new things and managed to solve difficult problems. Creating this game was challenging but fun.
 
-## Future Content
+## Future Content:
 In future I would like to add some features to this game. For example I would like ghosts to change colour when they are running away from Pac-Man.
