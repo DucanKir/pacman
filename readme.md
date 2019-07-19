@@ -161,7 +161,7 @@ function getPathDirection(start, target) {
   }
 }
 ```
-I felt more comfortable with JavaScript, CSS and HTML, learned new things and managed to solve difficult problems. Creating this game was challenging but fun.
+I felt more comfortable with JavaScript, CSS and HTML, learned new things and managed to solve difficult problems. Creating this game was challenging but fun. :octocat: 
 
 ## Future Content:
 In future I would like to add some features to this game. For example I would like ghosts to change colour when they are running away from Pac-Man.
