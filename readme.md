@@ -98,6 +98,8 @@ switch(e.keyCode) {
   direction = 'pacmanMoveRight'
 }
 ```
+![ezgif com-video-to-gif (2)](https://user-images.githubusercontent.com/51081298/61529194-b12d8c00-aa18-11e9-89ab-b6800fe14eb9.gif)
+
 ### Audio
 I used sounds from original Pac-Man game
 
