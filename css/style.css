@@ -79,12 +79,12 @@ h1 {
   background-color: white;
   border-radius: 100%;
   animation:btn 0.5s;
-  -webkit-animation: puls 0.5s;
+  -webkit-animation: btn 0.5s;
   animation-iteration-count:infinite;
   -webkit-animation-iteration-count:infinite;
 
 }
-@keyframes puls  {
+@keyframes btn  {
     0%   {border: 7px solid black;}
     50%  {border: 8px solid black;}
     100% {border: 9px solid black;}
